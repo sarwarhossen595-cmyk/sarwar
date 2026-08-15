@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>1000IQ Trading Bot</title>
+<style>
+body{font-family:Arial,sans-serif;background:#0b1220;color:#f3f4f6;margin:0;padding:18px}
+.card{max-width:620px;margin:auto;background:#111827;border-radius:18px;padding:20px;box-shadow:0 8px 30px #0005}
+h1{margin-top:0}.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:13px;color:#9ca3af}input,select,button{width:100%;box-sizing:border-box;padding:12px;border-radius:10px;border:1px solid #374151;background:#1f2937;color:white}
+button{background:#2563eb;border:0;font-weight:bold;margin-top:12px}.signal{font-size:30px;text-align:center;padding:18px;margin-top:16px;border-radius:14px;background:#1f2937}
+.buy{color:#34d399}.sell{color:#fb7185}.wait{color:#fbbf24}
+.small{color:#9ca3af;font-size:13px;line-height:1.5}.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #263244}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🤖 1000IQ Trading Bot V1</h1>
+<p class="small">Educational signal calculator. It does not guarantee profit and does not place real trades.</p>
+<div class="grid">
+<div><label>Current Price</label><input id="price" type="number" step="any" value="100"></div>
+<div><label>ATR (14)</label><input id="atr" type="number" step="any" value="2"></div>
+<div><label>EMA 20</label><input id="ema20" type="number" step="any" value="101"></div>
+<div><label>EMA 50</label><input id="ema50" type="number" step="any" value="99"></div>
+<div><label>RSI (14)</label><input id="rsi" type="number" step="any" value="55"></div>
+<div><label>Candle</label><select id="candle"><option value="bull">Bullish</option><option value="bear">Bearish</option></select></div>
+</div>
+<button onclick="analyze()">ANALYZE SIGNAL</button>
+<div id="signal" class="signal wait">WAIT</div>
+<div id="details"></div>
+<p class="small">Rule: EMA20/EMA50 trend + RSI + candle confirmation. SL = 1.5× ATR, TP = 3× ATR (1:2 risk/reward).</p>
+</div>
+<script>
+function n(id){return parseFloat(document.getElementById(id).value)}
+function analyze(){
+ const p=n('price'), a=n('atr'), e20=n('ema20'), e50=n('ema50'), r=n('rsi'), c=document.getElementById('candle').value;
+ let s='WAIT', cls='wait', sl='',tp='';
+ if(e20>e50 && r>50 && r<70 && c==='bull'){s='BUY';cls='buy';sl=(p-a*1.5).toFixed(5);tp=(p+a*3).toFixed(5)}
+ else if(e20<e50 && r<50 && r>30 && c==='bear'){s='SELL';cls='sell';sl=(p+a*1.5).toFixed(5);tp=(p-a*3).toFixed(5)}
+ document.getElementById('signal').className='signal '+cls;
+ document.getElementById('signal').textContent=s;
+ document.getElementById('details').innerHTML=(s==='WAIT')?
+ '<div class="row"><span>Action</span><b>NO TRADE</b></div>':
+ '<div class="row"><span>Entry</span><b>'+p+'</b></div><div class="row"><span>Stop Loss</span><b>'+sl+'</b></div><div class="row"><span>Take Profit</span><b>'+tp+'</b></div>';
+}
+</script>
+</body></html>

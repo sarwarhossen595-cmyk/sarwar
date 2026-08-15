@@ -1,0 +1,9 @@
+{
+  "name":"1000IQ Trading Bot",
+  "short_name":"1000IQ Bot",
+  "start_url":"index.html",
+  "display":"standalone",
+  "background_color":"#0b1220",
+  "theme_color":"#111827",
+  "icons":[]
+}
